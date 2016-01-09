@@ -7,17 +7,14 @@
     store = Redux.createStore(counter),
 
     render = () => {
-      console.log(store.getState());
+      document.body.textContent = store.getState();
     };
 
   store.subscribe(render);
   render();
 
-  store.dispatch({ 'type': 'INC'});
-  store.dispatch({ 'type': 'INC'});
-  store.dispatch({ 'type': 'DEC'});
-  store.dispatch({ 'type': 'DEC'});
-  store.dispatch({ 'type': 'INC'});
-  store.dispatch({ 'type': 'INC'});
+  document.addEventListener('click', () => {
+    store.dispatch({ 'type': 'INC' });
+  });
 
 })();
