@@ -1,0 +1,20 @@
+{
+  "name": "learn-redux",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Practice code for Redux: Writing a Counter Reducer with Tests on egghead.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sudaraka/learn-redux.git"
+  },
+  "author": "Sudaraka Wijesinghe <sudaraka@sudaraka.org> (https://sudaraka.org/)",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/sudaraka/learn-redux/issues"
+  },
+  "homepage": "https://github.com/sudaraka/learn-redux#readme"
+}
