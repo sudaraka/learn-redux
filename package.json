@@ -7,10 +7,13 @@
   "scripts": {
     "pretest": "eslint .",
     "test": "mocha test/**/*.js",
-    "start": "budo src/custom-store.js -H 127.0.0.1 -p 5000 -l"
+    "start": "budo src/redux-store-react.js:bundle.js -d static/html/ -H 127.0.0.1 -p 5000 -l -- -t reactify"
   },
   "eslintConfig": {
     "extends": "@sudaraka/default",
+    "ecmaFeatures": {
+      "jsx": true
+    },
     "env": {
       "node": true,
       "es6": true,
@@ -33,9 +36,12 @@
     "budo": "^7.1.0",
     "chai": "^3.4.1",
     "eslint": "^1.10.3",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "reactify": "^1.1.1"
   },
   "dependencies": {
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
     "redux": "^3.0.5"
   }
 }
