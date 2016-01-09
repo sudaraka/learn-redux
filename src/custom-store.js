@@ -22,7 +22,7 @@
           listeners.push(listener);
 
           return () => {
-            listeners = listeners.filter((l) => l !== listener);
+            listeners = listeners.filter((remove_listener) => remove_listener !== listener);
           };
         };
 

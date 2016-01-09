@@ -4,6 +4,7 @@
   const
     Redux = require('redux'),
     counter = require('./reducer').counter,
+
     store = Redux.createStore(counter),
 
     render = () => {

@@ -41,7 +41,7 @@
 
       it('Defined state must return state 0', () => {
         expect(
-          reducer.counter(undefined, {})
+          reducer.counter()  // state = undefined
         ).to.equal(0);
       });
 

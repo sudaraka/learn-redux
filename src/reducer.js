@@ -15,9 +15,8 @@ module.exports = (() => {
       else if('DEC' === action.type) {
         return state - 1;
       }
-      else {
-        return state;
-      }
+
+      return state;
 
     }
 
