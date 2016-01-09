@@ -7,7 +7,7 @@
   "scripts": {
     "pretest": "eslint .",
     "test": "mocha test/**/*.js",
-    "start": "budo src/redux-store.js -H 127.0.0.1 -p 5000 -l"
+    "start": "budo src/custom-store.js -H 127.0.0.1 -p 5000 -l"
   },
   "eslintConfig": {
     "extends": "@sudaraka/default",
