@@ -2,7 +2,7 @@ module.exports = (() => {
   'use strict';
 
   const
-    Redux = require('redux'),
+    // Redux = require('redux'),
 
     todo_action = (state, action) => {
       if('ADD_TODO' === action.type) {
@@ -47,9 +47,24 @@ module.exports = (() => {
       }
 
       return state;
+    },
+
+    combineReducers = (reducers) => {
+      return (state, action) => {
+        state = state || {};
+
+        return Object.keys(reducers).reduce(
+          (nextState, key) => {
+            nextState[key] = reducers[key](state[key], action);
+
+            return nextState;
+          },
+          {}
+        );
+      };
     };
 
-  return Redux.combineReducers({
+  return combineReducers({
     todos,
     visibilityFilter
   });
