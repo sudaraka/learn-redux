@@ -3,9 +3,9 @@
 
   const
     Redux = require('redux'),
-    todos = require('./todo-store'),
+    todoApp = require('./todo-store'),
 
-    store = Redux.createStore(todos),
+    store = Redux.createStore(todoApp),
 
     showState = () => {
       console.log(`Store state:\n ${JSON.stringify(store.getState(), null, 2)}\n${'-'.repeat(35)}\n`);
@@ -33,6 +33,13 @@
   store.dispatch({
     'type': 'TOGGLE_TODO',
     'id': 1
+  });
+  showState();
+
+  console.log('Dispatching SET_VISIBILITY_FILTER');
+  store.dispatch({
+    'type': 'SET_VISIBILITY_FILTER',
+    'filter': 'SHOW_COMPLETED'
   });
   showState();
 

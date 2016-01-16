@@ -35,8 +35,27 @@ module.exports = (() => {
       }
 
       return state;
+    },
+
+    visibilityFilter = (state, action) => {
+      state = state || 'SHOW_ALL';
+
+      if('SET_VISIBILITY_FILTER' === action.type) {
+        return action.filter;
+      }
+
+      return state;
+    },
+
+    todoApp = (state, action) => {
+      state = state || {};
+
+      return {
+        'todos': todos(state.todos, action),
+        'visibilityFilter': visibilityFilter(state.visibilityFilter, action)
+      };
     };
 
-  return todos;
+  return todoApp;
 
 })();
