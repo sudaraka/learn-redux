@@ -4,7 +4,7 @@
   const
     expect = require('expect'),
     deepFreeze = require('deep-freeze'),
-    todos = require('../src/todo-store');
+    todoApp = require('../src/todo-store');
 
   describe('Todo List', () => {
 
@@ -28,25 +28,27 @@
       deepFreeze(action);
 
       expect(
-        todos(stateBefore, action)
+        todoApp(stateBefore, action).todos
       ).toEqual(stateAfter);
 
     });
 
     it('TOGGLE_TODO must change the matching todo item in the store', () => {
       const
-        stateBefore = [
-          {
-            'id': 0,
-            'text': 'Learn Redux',
-            'completed': false
-          },
-          {
-            'id': 1,
-            'text': 'Go Shopping',
-            'completed': false
-          }
-        ],
+        stateBefore = {
+          'todos': [
+            {
+              'id': 0,
+              'text': 'Learn Redux',
+              'completed': false
+            },
+            {
+              'id': 1,
+              'text': 'Go Shopping',
+              'completed': false
+            }
+          ]
+        },
         action = {
           'type': 'TOGGLE_TODO',
           'id': 1
@@ -68,7 +70,7 @@
       deepFreeze(action);
 
       expect(
-        todos(stateBefore, action)
+        todoApp(stateBefore, action).todos
       ).toEqual(stateAfter);
 
     });
