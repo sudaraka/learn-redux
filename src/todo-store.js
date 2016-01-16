@@ -1,31 +1,41 @@
 module.exports = (() => {
   'use strict';
 
-  const todos = (state, action) => {
-    state = state || [];
-
-    if('ADD_TODO' === action.type) {
-      return [
-        ...state,
-        {
+  const
+    todo_action = (state, action) => {
+      if('ADD_TODO' === action.type) {
+        return {
           'id': action.id,
           'text': action.text,
           'completed': false
-        }
-      ];
-    }
-    else if('TOGGLE_TODO' === action.type) {
-      return state.map((todo) => {
-        if(action.id !== todo.id) {
-          return todo;
+        };
+      }
+      else if('TOGGLE_TODO' === action.type) {
+        if(action.id !== state.id) {
+          return state;
         }
 
-        return Object.assign({}, todo, { 'completed': !todo.completed });
-      });
-    }
+        return Object.assign({}, state, { 'completed': !state.completed });
+      }
 
-    return state;
-  };
+      return state;
+    },
+
+    todos = (state, action) => {
+      state = state || [];
+
+      if('ADD_TODO' === action.type) {
+        return [
+          ...state,
+          todo_action(null, action)
+        ];
+      }
+      else if('TOGGLE_TODO' === action.type) {
+        return state.map((todo) => todo_action(todo, action));
+      }
+
+      return state;
+    };
 
   return todos;
 
