@@ -4,7 +4,7 @@
   const
     expect = require('chai').expect,
     deepFreeze = require('deep-freeze'),
-    immutable = require('../src/immutable');
+    immutable = require('../src/immutable-array');
 
   describe('Avoid Array Mutation', () => {
 
