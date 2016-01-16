@@ -14,6 +14,15 @@ module.exports = (() => {
         }
       ];
     }
+    else if('TOGGLE_TODO' === action.type) {
+      return state.map((todo) => {
+        if(action.id !== todo.id) {
+          return todo;
+        }
+
+        return Object.assign({}, todo, { 'completed': !todo.completed });
+      });
+    }
 
     return state;
   };

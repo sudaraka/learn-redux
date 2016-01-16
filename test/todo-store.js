@@ -33,6 +33,46 @@
 
     });
 
+    it('TOGGLE_TODO must change the matching todo item in the store', () => {
+      const
+        stateBefore = [
+          {
+            'id': 0,
+            'text': 'Learn Redux',
+            'completed': false
+          },
+          {
+            'id': 1,
+            'text': 'Go Shopping',
+            'completed': false
+          }
+        ],
+        action = {
+          'type': 'TOGGLE_TODO',
+          'id': 1
+        },
+        stateAfter = [
+          {
+            'id': 0,
+            'text': 'Learn Redux',
+            'completed': false
+          },
+          {
+            'id': 1,
+            'text': 'Go Shopping',
+            'completed': true
+          }
+        ];
+
+      deepFreeze(stateBefore);
+      deepFreeze(action);
+
+      expect(
+        todos(stateBefore, action)
+      ).toEqual(stateAfter);
+
+    });
+
   });
 
 })();
