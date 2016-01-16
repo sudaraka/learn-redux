@@ -2,48 +2,49 @@
   'use strict';
 
   const
-    expect = require('chai').expect,
+    expect = require('expect'),
     deepFreeze = require('deep-freeze'),
     immutable = require('../src/immutable-array');
 
   describe('Avoid Array Mutation', () => {
 
     it('addCounter must return new list without mutating the existing list', () => {
-      const listBefore = [1];
-      let listAfter;
+      const
+        listBefore = [1],
+        listAfter = [1, 0];
 
       deepFreeze(listBefore);
 
-      listAfter = immutable.addCounter(listBefore);
+      expect(
+        immutable.addCounter(listBefore)
+      ).toEqual(listAfter);
 
-      expect(listBefore).not.have.members([0]);
-      expect(listAfter).have.members([1, 0]);
     });
 
     it('removeCounter must return new list without mutating the existing list', () => {
-      const listBefore = [0, 10, 20];
-      let listAfter;
+      const
+        listBefore = [0, 10, 20],
+        listAfter = [0, 20];
 
       deepFreeze(listBefore);
 
-      listAfter = immutable.removeCounter(listBefore, 1);
+      expect(
+        immutable.removeCounter(listBefore, 1)
+      ).toEqual(listAfter);
 
-      expect(listBefore).have.members([0, 10, 20]);
-      expect(listAfter).have.members([0, 20]);
-      expect(listAfter).not.have.members([10]);
     });
 
-    it('removeCounter must return new list without mutating the existing list', () => {
-      const listBefore = [0, 10, 20];
-      let listAfter;
+    it('incCounter must return new list without mutating the existing list', () => {
+      const
+        listBefore = [0, 10, 20],
+        listAfter = [0, 11, 20];
 
       deepFreeze(listBefore);
 
-      listAfter = immutable.incCounter(listBefore, 1);
+      expect(
+        immutable.incCounter(listBefore, 1)
+      ).toEqual(listAfter);
 
-      expect(listBefore).have.members([0, 10, 20]);
-      expect(listAfter).have.members([0, 11, 20]);
-      expect(listAfter).not.have.members([10]);
     });
 
   });

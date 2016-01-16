@@ -2,7 +2,7 @@
   'use strict';
 
   const
-    expect = require('chai').expect,
+    expect = require('expect'),
     deepFreeze = require('deep-freeze'),
     immutable = require('../src/immutable-object');
 
@@ -14,16 +14,19 @@
           'id': 0,
           'text': 'Learn Redux',
           'completed': false
+        },
+        todoAfter = {
+          'id': 0,
+          'text': 'Learn Redux',
+          'completed': true
         };
-
-      let todoAfter;
 
       deepFreeze(todoBefore);
 
-      todoAfter = immutable.toggleTodo(todoBefore);
+      expect(
+        immutable.toggleTodo(todoBefore)
+      ).toEqual(todoAfter);
 
-      expect(todoBefore.completed).to.be.false;  // eslint-disable-line no-unused-expressions
-      expect(todoAfter.completed).to.be.true;  // eslint-disable-line no-unused-expressions
     });
 
   });
