@@ -10,7 +10,7 @@
 
     it('ADD_TODO must put a new todo item in the store', () => {
       const
-        stateBefore = [],
+        stateBefore = {},
         action = {
           'type': 'ADD_TODO',
           'id': 0,

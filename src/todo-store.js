@@ -2,6 +2,8 @@ module.exports = (() => {
   'use strict';
 
   const
+    Redux = require('redux'),
+
     todo_action = (state, action) => {
       if('ADD_TODO' === action.type) {
         return {
@@ -45,17 +47,11 @@ module.exports = (() => {
       }
 
       return state;
-    },
-
-    todoApp = (state, action) => {
-      state = state || {};
-
-      return {
-        'todos': todos(state.todos, action),
-        'visibilityFilter': visibilityFilter(state.visibilityFilter, action)
-      };
     };
 
-  return todoApp;
+  return Redux.combineReducers({
+    todos,
+    visibilityFilter
+  });
 
 })();
