@@ -9,14 +9,26 @@
 
     store = Redux.createStore(todoApp),
 
-    TodoApp = ({ todos }) => {  // eslint-disable-line no-unused-vars
+    getVisibleTodos = (todos, filter) => {
+      if('SHOW_COMPLETED' === filter) {
+        return todos.filter((todo) => todo.completed);
+      }
+      else if('SHOW_ACTIVE' === filter) {
+        return todos.filter((todo) => !todo.completed);
+      }
+
+      return todos;
+    },
+
+    TodoApp = ({ todos, visibilityFilter }) => {  // eslint-disable-line no-unused-vars
+      const visibleTodos = getVisibleTodos(todos, visibilityFilter);
+
       return <div>
         <input ref={(node) => {
           this.input = node;
         }} />
         <button
           onClick={() => {
-            console.log(nextTodoId);
             store.dispatch({
               'type': 'ADD_TODO',
               'text': this.input.value,
@@ -28,7 +40,7 @@
         >Add Todo</button>
 
         <ul>
-        {todos.map(
+        {visibleTodos.map(
           (todo) => {
             return <li key={todo.id}
               onClick={() => {
@@ -45,13 +57,39 @@
           }
         )}
         </ul>
+        <p>
+          Show:
+          {' '}
+          <FilterLink filter='SHOW_ALL' currentFilter={visibilityFilter}>All</FilterLink>
+          {' '}
+          <FilterLink filter='SHOW_ACTIVE' currentFilter={visibilityFilter}>Active</FilterLink>
+          {' '}
+          <FilterLink filter='SHOW_COMPLETED' currentFilter={visibilityFilter}>Completed</FilterLink>
+        </p>
       </div>;
+    },
+
+    FilterLink = ({ filter, currentFilter, children }) => {  // eslint-disable-line no-unused-vars
+      if(filter === currentFilter) {
+        return <span>{children}</span>;
+      }
+
+      return <a href='#'
+        onClick={(e) => {
+          e.preventDefault();
+
+          store.dispatch({
+            'type': 'SET_VISIBILITY_FILTER',
+            filter
+          });
+        }}
+        >{children}</a>;
     },
 
     render = () => {
       ReactDOM.render(
         <TodoApp
-          todos={store.getState().todos}
+          {...store.getState()}
         />,
         document.getElementById('root')
       );
