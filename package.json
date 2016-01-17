@@ -7,7 +7,7 @@
   "scripts": {
     "pretest": "eslint .",
     "test": "mocha test/**/*.js",
-    "start": "budo src/redux-store-react.js:bundle.js -d static/html/ -H 127.0.0.1 -p 5000 -l -- -t reactify"
+    "start": "budo src/todo-redux-store-react.js:bundle.js -d static/html/ -H 127.0.0.1 -p 5000 -l -- -t reactify"
   },
   "eslintConfig": {
     "extends": "@sudaraka/default",
