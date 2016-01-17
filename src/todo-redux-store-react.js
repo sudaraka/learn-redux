@@ -20,7 +20,7 @@
       return todos;
     },
 
-    AddTodo = ({ onAddClick }) => {  // eslint-disable-line no-unused-vars
+    AddTodo = () => {  // eslint-disable-line no-unused-vars
       let input;
 
       return <div>
@@ -29,7 +29,11 @@
         }} />
         <button
           onClick={() => {
-            onAddClick(input.value);
+            store.dispatch({
+              'type': 'ADD_TODO',
+              'id': nextTodoId += 1,
+              'text': input.value
+            });
 
             input.value = '';
           }}
@@ -83,46 +87,21 @@
       </p>;
     },
 
-    TodoApp = ({ todos, visibilityFilter }) => {  // eslint-disable-line no-unused-vars
+    TodoApp = () => {  // eslint-disable-line no-unused-vars
       return <div>
-        <AddTodo
-          onAddClick={(text) => {
-            store.dispatch({
-              'type': 'ADD_TODO',
-              'id': nextTodoId += 1,
-              text
-            });
-          }}
-        />
+        <AddTodo />
 
-        <TodoList
-          todos={getVisibleTodos(todos, visibilityFilter)}
-          onTodoClick={(id) => {
-            store.dispatch({
-              'type': 'TOGGLE_TODO',
-              id
-            });
-          }}
-        />
+        <VisibleTodoList />
 
         <Footer />
 
       </div>;
-    },
-
-    render = () => {
-      ReactDOM.render(
-        <TodoApp
-          {...store.getState()}
-        />,
-        document.getElementById('root')
-      );
     };
 
   let nextTodoId = 1;
 
   class FilterLink extends React.Component {  // eslint-disable-line no-unused-vars
-    componenetDidMount() {
+    componentDidMount() {
       this.unsubscribe = store.subscribe(() => {
         this.forceUpdate();
       });
@@ -150,7 +129,37 @@
     }
   }
 
-  store.subscribe(render);
-  render();
+  class VisibleTodoList extends React.Component {  // eslint-disable-line no-unused-vars
+    componentDidMount() {
+      this.unsubscribe = store.subscribe(() => {
+        this.forceUpdate();
+      });
+    }
+
+    componentWillUnmount() {
+      this.unsubscribe();
+    }
+
+    render() {
+      const
+        state = store.getState();
+
+      return <TodoList
+        todos={getVisibleTodos(state.todos, state.visibilityFilter)}
+
+        onTodoClick={(id) => {
+          store.dispatch({
+            'type': 'TOGGLE_TODO',
+            id
+          });
+        }}
+      />;
+    }
+  }
+
+  ReactDOM.render(
+    <TodoApp />,
+    document.getElementById('root')
+  );
 
 })();
