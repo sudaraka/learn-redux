@@ -7,8 +7,6 @@
     ReactDOM = require('react-dom'),
     todoApp = require('./todo-store'),
 
-    store = Redux.createStore(todoApp),
-
     getVisibleTodos = (todos, filter) => {
       if('SHOW_COMPLETED' === filter) {
         return todos.filter((todo) => todo.completed);
@@ -20,7 +18,7 @@
       return todos;
     },
 
-    AddTodo = () => {  // eslint-disable-line no-unused-vars
+    AddTodo = ({ store }) => {  // eslint-disable-line no-unused-vars
       let input;
 
       return <div>
@@ -75,25 +73,23 @@
         >{children}</a>;
     },
 
-    Footer = () => {  // eslint-disable-line no-unused-vars
+    Footer = ({ store }) => {  // eslint-disable-line no-unused-vars
       return <p>
         Show:
         {' '}
-        <FilterLink filter='SHOW_ALL'>All</FilterLink>
+        <FilterLink filter='SHOW_ALL' store={store}>All</FilterLink>
         {' '}
-        <FilterLink filter='SHOW_ACTIVE'>Active</FilterLink>
+        <FilterLink filter='SHOW_ACTIVE' store={store}>Active</FilterLink>
         {' '}
-        <FilterLink filter='SHOW_COMPLETED'>Completed</FilterLink>
+        <FilterLink filter='SHOW_COMPLETED' store={store}>Completed</FilterLink>
       </p>;
     },
 
-    TodoApp = () => {  // eslint-disable-line no-unused-vars
+    TodoApp = ({ store }) => {  // eslint-disable-line no-unused-vars
       return <div>
-        <AddTodo />
-
-        <VisibleTodoList />
-
-        <Footer />
+        <AddTodo store={store} />
+        <VisibleTodoList store={store} />
+        <Footer store={store} />
 
       </div>;
     };
@@ -102,6 +98,8 @@
 
   class FilterLink extends React.Component {  // eslint-disable-line no-unused-vars
     componentDidMount() {
+      const { store } = this.props;
+
       this.unsubscribe = store.subscribe(() => {
         this.forceUpdate();
       });
@@ -113,8 +111,9 @@
 
     render() {
       const
-        state = store.getState(),
-        props = this.props;
+        props = this.props,
+        { store } = props,
+        state = store.getState();
 
       return <Link
         active={props.filter === state.visibilityFilter}
@@ -131,6 +130,8 @@
 
   class VisibleTodoList extends React.Component {  // eslint-disable-line no-unused-vars
     componentDidMount() {
+      const { store } = this.props;
+
       this.unsubscribe = store.subscribe(() => {
         this.forceUpdate();
       });
@@ -142,6 +143,8 @@
 
     render() {
       const
+        props = this.props,
+        { store } = props,
         state = store.getState();
 
       return <TodoList
@@ -158,7 +161,7 @@
   }
 
   ReactDOM.render(
-    <TodoApp />,
+    <TodoApp store={Redux.createStore(todoApp)} />,
     document.getElementById('root')
   );
 
