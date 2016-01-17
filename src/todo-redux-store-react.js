@@ -57,8 +57,8 @@
       </ul>;
     },
 
-    FilterLink = ({ filter, currentFilter, children, onClick }) => {  // eslint-disable-line no-unused-vars
-      if(filter === currentFilter) {
+    Link = ({ active, children, onClick }) => {  // eslint-disable-line no-unused-vars
+      if(active) {
         return <span>{children}</span>;
       }
 
@@ -66,20 +66,20 @@
         onClick={(e) => {
           e.preventDefault();
 
-          onClick(filter);
+          onClick();
         }}
         >{children}</a>;
     },
 
-    Footer = ({ visibilityFilter, onFilterClick }) => {  // eslint-disable-line no-unused-vars
+    Footer = () => {  // eslint-disable-line no-unused-vars
       return <p>
         Show:
         {' '}
-        <FilterLink filter='SHOW_ALL' currentFilter={visibilityFilter} onClick={onFilterClick}>All</FilterLink>
+        <FilterLink filter='SHOW_ALL'>All</FilterLink>
         {' '}
-        <FilterLink filter='SHOW_ACTIVE' currentFilter={visibilityFilter} onClick={onFilterClick}>Active</FilterLink>
+        <FilterLink filter='SHOW_ACTIVE'>Active</FilterLink>
         {' '}
-        <FilterLink filter='SHOW_COMPLETED' currentFilter={visibilityFilter} onClick={onFilterClick}>Completed</FilterLink>
+        <FilterLink filter='SHOW_COMPLETED'>Completed</FilterLink>
       </p>;
     },
 
@@ -105,15 +105,7 @@
           }}
         />
 
-        <Footer
-          visibilityFilter={visibilityFilter}
-          onFilterClick={(filter) => {
-            store.dispatch({
-              'type': 'SET_VISIBILITY_FILTER',
-              filter
-            });
-          }}
-        />
+        <Footer />
 
       </div>;
     },
@@ -128,6 +120,35 @@
     };
 
   let nextTodoId = 1;
+
+  class FilterLink extends React.Component {  // eslint-disable-line no-unused-vars
+    componenetDidMount() {
+      this.unsubscribe = store.subscribe(() => {
+        this.forceUpdate();
+      });
+    }
+
+    componentWillUnmount() {
+      this.unsubscribe();
+    }
+
+    render() {
+      const
+        state = store.getState(),
+        props = this.props;
+
+      return <Link
+        active={props.filter === state.visibilityFilter}
+
+        onClick={() => {
+          store.dispatch({
+            'type': 'SET_VISIBILITY_FILTER',
+            'filter': props.filter
+          });
+        }}
+      >{props.children}</Link>;
+    }
+  }
 
   store.subscribe(render);
   render();
