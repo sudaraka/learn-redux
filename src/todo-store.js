@@ -28,8 +28,8 @@ module.exports = (() => {
 
       if('ADD_TODO' === action.type) {
         return [
-          ...state,
-          todo_action(null, action)
+          todo_action(null, action),
+          ...state
         ];
       }
       else if('TOGGLE_TODO' === action.type) {
