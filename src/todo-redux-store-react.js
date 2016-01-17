@@ -18,7 +18,7 @@
       return todos;
     },
 
-    AddTodo = ({ store }) => {  // eslint-disable-line no-unused-vars
+    AddTodo = (props, { store }) => {  // eslint-disable-line no-unused-vars
       let input;
 
       return <div>
@@ -73,23 +73,23 @@
         >{children}</a>;
     },
 
-    Footer = ({ store }) => {  // eslint-disable-line no-unused-vars
+    Footer = () => {  // eslint-disable-line no-unused-vars
       return <p>
         Show:
         {' '}
-        <FilterLink filter='SHOW_ALL' store={store}>All</FilterLink>
+        <FilterLink filter='SHOW_ALL'>All</FilterLink>
         {' '}
-        <FilterLink filter='SHOW_ACTIVE' store={store}>Active</FilterLink>
+        <FilterLink filter='SHOW_ACTIVE'>Active</FilterLink>
         {' '}
-        <FilterLink filter='SHOW_COMPLETED' store={store}>Completed</FilterLink>
+        <FilterLink filter='SHOW_COMPLETED'>Completed</FilterLink>
       </p>;
     },
 
-    TodoApp = ({ store }) => {  // eslint-disable-line no-unused-vars
+    TodoApp = () => {  // eslint-disable-line no-unused-vars
       return <div>
-        <AddTodo store={store} />
-        <VisibleTodoList store={store} />
-        <Footer store={store} />
+        <AddTodo />
+        <VisibleTodoList />
+        <Footer />
 
       </div>;
     };
@@ -98,7 +98,7 @@
 
   class FilterLink extends React.Component {  // eslint-disable-line no-unused-vars
     componentDidMount() {
-      const { store } = this.props;
+      const { store } = this.context;
 
       this.unsubscribe = store.subscribe(() => {
         this.forceUpdate();
@@ -112,7 +112,7 @@
     render() {
       const
         props = this.props,
-        { store } = props,
+        { store } = this.context,
         state = store.getState();
 
       return <Link
@@ -130,7 +130,7 @@
 
   class VisibleTodoList extends React.Component {  // eslint-disable-line no-unused-vars
     componentDidMount() {
-      const { store } = this.props;
+      const { store } = this.context;
 
       this.unsubscribe = store.subscribe(() => {
         this.forceUpdate();
@@ -143,8 +143,7 @@
 
     render() {
       const
-        props = this.props,
-        { store } = props,
+        { store } = this.context,
         state = store.getState();
 
       return <TodoList
@@ -160,8 +159,38 @@
     }
   }
 
+  class Provider extends React.Component {  // eslint-disable-line no-unused-vars
+    getChildContext() {
+      return {
+        'store': this.props.store
+      };
+    }
+
+    render() {
+      return this.props.children;
+    }
+  }
+
+  Provider.childContextTypes = {
+    'store': React.PropTypes.object
+  };
+
+  FilterLink.contextTypes = {
+    'store': React.PropTypes.object
+  };
+
+  VisibleTodoList.contextTypes = {
+    'store': React.PropTypes.object
+  };
+
+  AddTodo.contextTypes = {
+    'store': React.PropTypes.object
+  };
+
   ReactDOM.render(
-    <TodoApp store={Redux.createStore(todoApp)} />,
+    <Provider store={Redux.createStore(todoApp)}>
+      <TodoApp />
+    </Provider>,
     document.getElementById('root')
   );
 
