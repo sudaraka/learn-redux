@@ -4,6 +4,7 @@
   const
     Redux = require('redux'),
     React = require('react'),  // eslint-disable-line no-unused-vars
+    Provider = require('react-redux').Provider,  // eslint-disable-line no-unused-vars
     ReactDOM = require('react-dom'),
     todoApp = require('./todo-store'),
 
@@ -158,22 +159,6 @@
       />;
     }
   }
-
-  class Provider extends React.Component {  // eslint-disable-line no-unused-vars
-    getChildContext() {
-      return {
-        'store': this.props.store
-      };
-    }
-
-    render() {
-      return this.props.children;
-    }
-  }
-
-  Provider.childContextTypes = {
-    'store': React.PropTypes.object
-  };
 
   FilterLink.contextTypes = {
     'store': React.PropTypes.object
