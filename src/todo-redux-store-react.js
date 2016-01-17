@@ -20,6 +20,26 @@
       return todos;
     },
 
+    Todo = ({ text, completed, onClick }) => {  // eslint-disable-line no-unused-vars
+      return <li
+        onClick={onClick}
+
+        style={{
+          'textDecoration': completed ? 'line-through' : 'none'
+        }}
+      >{text}</li>;
+    },
+
+    TodoList = ({ todos, onTodoClick }) => {  // eslint-disable-line no-unused-vars
+      return <ul>
+        {todos.map((todo) => <Todo
+          key={todo.id}
+          {...todo}
+          onClick={() => onTodoClick(todo.id) }
+        />)}
+      </ul>;
+    },
+
     TodoApp = ({ todos, visibilityFilter }) => {  // eslint-disable-line no-unused-vars
       const visibleTodos = getVisibleTodos(todos, visibilityFilter);
 
@@ -39,24 +59,16 @@
           }}
         >Add Todo</button>
 
-        <ul>
-        {visibleTodos.map(
-          (todo) => {
-            return <li key={todo.id}
-              onClick={() => {
-                store.dispatch({
-                  'type': 'TOGGLE_TODO',
-                  'id': todo.id
-                });
-              }}
+        <TodoList
+          todos={visibleTodos}
+          onTodoClick={(id) => {
+            store.dispatch({
+              'type': 'TOGGLE_TODO',
+              id
+            });
+          }}
+        />
 
-              style={{
-                'textDecoration': todo.completed ? 'line-through' : 'none'
-              }}
-            >{todo.text}</li>;
-          }
-        )}
-        </ul>
         <p>
           Show:
           {' '}
