@@ -20,6 +20,23 @@
       return todos;
     },
 
+    mapStateToLinkProps = (state, ownProps) => {
+      return {
+        'active': ownProps.filter === state.visibilityFilter
+      };
+    },
+
+    mapDispatchToLinkProps = (dispatch, ownProps) => {
+      return {
+        'onClick': () => {
+          dispatch({
+            'type': 'SET_VISIBILITY_FILTER',
+            'filter': ownProps.filter
+          });
+        }
+      };
+    },
+
     mapStateToTodoListProps = (state) => {
       return {
         'todos': getVisibleTodos(state.todos, state.visibilityFilter)
@@ -83,7 +100,8 @@
       </p>;
     },
 
-    VisibleTodoList = connect(mapStateToTodoListProps, mapDispatchToTodoListProps)(TodoList),
+    VisibleTodoList = connect(mapStateToTodoListProps, mapDispatchToTodoListProps)(TodoList), // eslint-disable-line no-unused-vars
+    FilterLink = connect(mapStateToLinkProps, mapDispatchToLinkProps)(Link),  // eslint-disable-line no-unused-vars
 
     TodoApp = () => {  // eslint-disable-line no-unused-vars
       return <div>
@@ -117,47 +135,6 @@
         >Add Todo</button>
       </div>;
     };
-
-
-  class FilterLink extends React.Component {  // eslint-disable-line no-unused-vars
-    componentDidMount() {
-      const { store } = this.context;
-
-      this.unsubscribe = store.subscribe(() => {
-        this.forceUpdate();
-      });
-    }
-
-    componentWillUnmount() {
-      this.unsubscribe();
-    }
-
-    render() {
-      const
-        props = this.props,
-        { store } = this.context,
-        state = store.getState();
-
-      return <Link
-        active={props.filter === state.visibilityFilter}
-
-        onClick={() => {
-          store.dispatch({
-            'type': 'SET_VISIBILITY_FILTER',
-            'filter': props.filter
-          });
-        }}
-      >{props.children}</Link>;
-    }
-  }
-
-  FilterLink.contextTypes = {
-    'store': React.PropTypes.object
-  };
-
-  VisibleTodoList.contextTypes = {
-    'store': React.PropTypes.object
-  };
 
   AddTodo = connect()(AddTodo);
 
