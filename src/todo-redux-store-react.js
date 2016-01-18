@@ -9,6 +9,28 @@
     ReactDOM = require('react-dom'),
     todoApp = require('./todo-store'),
 
+    addTodo = (text) => {
+      return {
+        'type': 'ADD_TODO',
+        'id': nextTodoId += 1,
+        text
+      };
+    },
+
+    setVisibilityFilter = (filter) => {
+      return {
+        'type': 'SET_VISIBILITY_FILTER',
+        filter
+      };
+    },
+
+    toggleTodo = (id) => {
+      return {
+        'type': 'TOGGLE_TODO',
+        id
+      };
+    },
+
     getVisibleTodos = (todos, filter) => {
       if('SHOW_COMPLETED' === filter) {
         return todos.filter((todo) => todo.completed);
@@ -29,10 +51,7 @@
     mapDispatchToLinkProps = (dispatch, ownProps) => {
       return {
         'onClick': () => {
-          dispatch({
-            'type': 'SET_VISIBILITY_FILTER',
-            'filter': ownProps.filter
-          });
+          dispatch(setVisibilityFilter(ownProps.filter));
         }
       };
     },
@@ -46,10 +65,7 @@
     mapDispatchToTodoListProps = (dispatch) => {
       return {
         'onTodoClick': (id) => {
-          dispatch({
-            'type': 'TOGGLE_TODO',
-            id
-          });
+          dispatch(toggleTodo(id));
         }
       };
     },
@@ -124,11 +140,7 @@
         }} />
         <button
           onClick={() => {
-            dispatch({
-              'type': 'ADD_TODO',
-              'id': nextTodoId += 1,
-              'text': input.value
-            });
+            dispatch(addTodo(input.value));
 
             input.value = '';
           }}
