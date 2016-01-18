@@ -5,6 +5,7 @@
     Redux = require('redux'),
     React = require('react'),  // eslint-disable-line no-unused-vars
     Provider = require('react-redux').Provider,  // eslint-disable-line no-unused-vars
+    connect = require('react-redux').connect,  // eslint-disable-line no-unused-vars
     ReactDOM = require('react-dom'),
     todoApp = require('./todo-store'),
 
@@ -17,6 +18,23 @@
       }
 
       return todos;
+    },
+
+    mapStateToProps = (state) => {
+      return {
+        'todos': getVisibleTodos(state.todos, state.visibilityFilter)
+      };
+    },
+
+    mapDispatchToProps = (dispatch) => {
+      return {
+        'onTodoClick': (id) => {
+          dispatch({
+            'type': 'TOGGLE_TODO',
+            id
+          });
+        }
+      };
     },
 
     AddTodo = (props, { store }) => {  // eslint-disable-line no-unused-vars
@@ -86,6 +104,8 @@
       </p>;
     },
 
+    VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList),
+
     TodoApp = () => {  // eslint-disable-line no-unused-vars
       return <div>
         <AddTodo />
@@ -126,37 +146,6 @@
           });
         }}
       >{props.children}</Link>;
-    }
-  }
-
-  class VisibleTodoList extends React.Component {  // eslint-disable-line no-unused-vars
-    componentDidMount() {
-      const { store } = this.context;
-
-      this.unsubscribe = store.subscribe(() => {
-        this.forceUpdate();
-      });
-    }
-
-    componentWillUnmount() {
-      this.unsubscribe();
-    }
-
-    render() {
-      const
-        { store } = this.context,
-        state = store.getState();
-
-      return <TodoList
-        todos={getVisibleTodos(state.todos, state.visibilityFilter)}
-
-        onTodoClick={(id) => {
-          store.dispatch({
-            'type': 'TOGGLE_TODO',
-            id
-          });
-        }}
-      />;
     }
   }
 
