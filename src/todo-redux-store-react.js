@@ -20,13 +20,13 @@
       return todos;
     },
 
-    mapStateToProps = (state) => {
+    mapStateToTodoListProps = (state) => {
       return {
         'todos': getVisibleTodos(state.todos, state.visibilityFilter)
       };
     },
 
-    mapDispatchToProps = (dispatch) => {
+    mapDispatchToTodoListProps = (dispatch) => {
       return {
         'onTodoClick': (id) => {
           dispatch({
@@ -35,27 +35,6 @@
           });
         }
       };
-    },
-
-    AddTodo = (props, { store }) => {  // eslint-disable-line no-unused-vars
-      let input;
-
-      return <div>
-        <input ref={(node) => {
-          input = node;
-        }} />
-        <button
-          onClick={() => {
-            store.dispatch({
-              'type': 'ADD_TODO',
-              'id': nextTodoId += 1,
-              'text': input.value
-            });
-
-            input.value = '';
-          }}
-        >Add Todo</button>
-      </div>;
     },
 
     Todo = ({ text, completed, onClick }) => {  // eslint-disable-line no-unused-vars
@@ -104,7 +83,7 @@
       </p>;
     },
 
-    VisibleTodoList = connect(mapStateToProps, mapDispatchToProps)(TodoList),
+    VisibleTodoList = connect(mapStateToTodoListProps, mapDispatchToTodoListProps)(TodoList),
 
     TodoApp = () => {  // eslint-disable-line no-unused-vars
       return <div>
@@ -115,7 +94,30 @@
       </div>;
     };
 
-  let nextTodoId = 1;
+  let
+    nextTodoId = 1,
+
+    AddTodo = ({ dispatch }) => {  // eslint-disable-line no-unused-vars
+      let input;
+
+      return <div>
+        <input ref={(node) => {
+          input = node;
+        }} />
+        <button
+          onClick={() => {
+            dispatch({
+              'type': 'ADD_TODO',
+              'id': nextTodoId += 1,
+              'text': input.value
+            });
+
+            input.value = '';
+          }}
+        >Add Todo</button>
+      </div>;
+    };
+
 
   class FilterLink extends React.Component {  // eslint-disable-line no-unused-vars
     componentDidMount() {
@@ -157,9 +159,7 @@
     'store': React.PropTypes.object
   };
 
-  AddTodo.contextTypes = {
-    'store': React.PropTypes.object
-  };
+  AddTodo = connect()(AddTodo);
 
   ReactDOM.render(
     <Provider store={Redux.createStore(todoApp)}>
